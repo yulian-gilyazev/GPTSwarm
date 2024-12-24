@@ -22,7 +22,7 @@ class GPT4VChat(VisualLLM):
         model_name: str,
         max_workers: int = 10,
         max_tokens: int = 300,
-        openai_proxy: str = "https://api.openai.com/v1/chat/completions",
+        openai_proxy: str = "https://api.vsegpt.ru/v1",
     ):
         self.model_name = model_name
         self.max_workers = max_workers
