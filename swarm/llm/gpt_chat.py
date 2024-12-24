@@ -17,7 +17,9 @@ from swarm.llm.llm import LLM
 from swarm.llm.llm_registry import LLMRegistry
 
 
-LM_STUDIO_URL = "http://localhost:1234/v1"
+LM_STUDIO_URL = "https://api.vsegpt.ru/v1"
+
+LLM_URL = "https://api.vsegpt.ru/v1"
 
 
 load_dotenv()
@@ -39,11 +41,9 @@ def gpt_chat(
         return ''
 
     api_kwargs: Dict[str, Any]
-    if model == "lmstudio":
-        api_kwargs = dict(base_url=LM_STUDIO_URL)
-    else:
-        api_key = random.sample(OPENAI_API_KEYS, 1)[0]
-        api_kwargs = dict(api_key=api_key)
+    api_kwargs = dict(base_url=LLM_URL, api_key=random.sample(OPENAI_API_KEYS, 1)[0])
+    # api_key = random.sample(OPENAI_API_KEYS, 1)[0]
+    # api_kwargs = dict(api_key=api_key)
     client = OpenAI(**api_kwargs)
 
     formated_messages = [asdict(message) for message in messages]
@@ -57,10 +57,10 @@ def gpt_chat(
     n=num_comps)
     
     if num_comps == 1:
-        cost_count(response, model)
+        # cost_count(response, model)
         return response.choices[0].message.content
 
-    cost_count(response, model)
+    # cost_count(response, model)
 
     return [choice.message.content for choice in response.choices]
 
@@ -78,11 +78,7 @@ async def gpt_achat(
         return '' 
 
     api_kwargs: Dict[str, Any]
-    if model == "lmstudio":
-        api_kwargs = dict(base_url=LM_STUDIO_URL)
-    else:
-        api_key = random.sample(OPENAI_API_KEYS, 1)[0]
-        api_kwargs = dict(api_key=api_key)
+    api_kwargs = dict(base_url=LLM_URL, api_key=random.sample(OPENAI_API_KEYS, 1)[0])
     aclient = AsyncOpenAI(**api_kwargs)
 
     formated_messages = [asdict(message) for message in messages]
@@ -100,11 +96,10 @@ async def gpt_achat(
         print('Timeout')
         raise TimeoutError("GPT Timeout")
     if num_comps == 1:
-        cost_count(response, model)
+        # cost_count(response, model)
         return response.choices[0].message.content
     
-    cost_count(response, model)
-
+    # cost_count(response, model)
     return [choice.message.content for choice in response.choices]
 
 
