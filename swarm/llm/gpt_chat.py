@@ -17,16 +17,25 @@ from swarm.llm.llm import LLM
 from swarm.llm.llm_registry import LLMRegistry
 
 
-LM_STUDIO_URL = "https://api.vsegpt.ru/v1"
+def get_url_and_keys():
+    api_url = os.environ.get("GPTSWARM_API_URL", "https://api.vsegpt.ru/v1")
+    if "openai" in api_url:
+        api_keys = [os.environ.get("OPENAI_API_KEY")]
+    else:
+        api_keys = [os.environ.get("VSE_GPT_API_KEY")]
+    return api_url, api_keys
 
-LLM_URL = "https://api.vsegpt.ru/v1"
+LLM_URL, OPENAI_API_KEYS = get_url_and_keys()
 
-
-load_dotenv()
-OPENAI_API_KEYS=[os.getenv(f"OPENAI_API_KEY")]
-for i in range(10):
-    if os.getenv(f"OPENAI_API_KEY{i}"):
-        OPENAI_API_KEYS.append(os.getenv(f"OPENAI_API_KEY{i}"))
+LM_STUDIO_URL = LLM_URL
+#
+# LLM_URL = "https://api.vsegpt.ru/v1"
+#
+# load_dotenv()
+# OPENAI_API_KEYS=[os.getenv(f"VSE_GPT_API_KEY")]
+# for i in range(10):
+#     if os.getenv(f"OPENAI_API_KEY{i}"):
+#         OPENAI_API_KEYS.append(os.getenv(f"OPENAI_API_KEY{i}"))
 
 
 def gpt_chat(
@@ -98,7 +107,7 @@ async def gpt_achat(
     if num_comps == 1:
         # cost_count(response, model)
         return response.choices[0].message.content
-    
+
     # cost_count(response, model)
     return [choice.message.content for choice in response.choices]
 
