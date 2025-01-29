@@ -22,7 +22,7 @@ def get_url_and_keys():
     if "openai" in api_url:
         api_keys = [os.environ.get("OPENAI_API_KEY")]
     else:
-        api_keys = [os.environ.get("VSE_GPT_API_KEY")]
+        api_keys = [os.environ.get("OPENAI_API_KEY")]
     return api_url, api_keys
 
 LLM_URL, OPENAI_API_KEYS = get_url_and_keys()
